@@ -41,6 +41,8 @@ build() {
     docker buildx build --load --platform ${BPLATFORM} \
         --build-arg GO_VERSION=${GO_VERSION:-1.15.10} \
         --build-arg UBUNTU_VERSION=${UBUNTU_VERSION:-20.04} \
+        --build-arg PLUGIN_VERSION="${PLUGIN_VERSION}" \
+        --build-arg BUILD_DATE="$(date +"%Y-%m-%dT%H:%M:%SZ")" \
         -t rootfsimage -f $1/Dockerfile .
     id=$(docker create rootfsimage true) # id was cd851ce43a403 when the image was created
     rm -rf build/rootfs
