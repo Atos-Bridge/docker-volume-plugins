@@ -15,7 +15,7 @@ build() {
     if [ $ARCH == "armv7l" ]
     then
         BPLATFORM="linux/arm/v7"
-    else if [ $ARCH == "aarch64" ] 
+    else if [ $ARCH == "aarch64" ]
         then
             BPLATFORM="linux/arm64"
         else
@@ -31,7 +31,7 @@ build() {
     docker rmi -f rootfsimage || true
     docker buildx build --load --platform ${BPLATFORM} \
         --build-arg GO_VERSION=1.15.10 \
-        --build-arg UBUNTU_VERSION=20.04 \
+        --build-arg UBUNTU_VERSION=22.04 \
         -t rootfsimage -f $1/Dockerfile .
     id=$(docker create rootfsimage true) # id was cd851ce43a403 when the image was created
     rm -rf build/rootfs
