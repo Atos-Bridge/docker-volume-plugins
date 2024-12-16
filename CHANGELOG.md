@@ -1,5 +1,12 @@
 Changelog
 =========
+## 2.0.10
+* glusterfs: Change bind option "readonly" to "ro" for /etc/ssl mount to fix compatibility issue with containerd.io v1.7.24
+* Bump Ubuntu version to 24.04
+* Bump Go version to 1.23
+* glusterfs: Bump GlusterFS client to v11.
+* Add support for buid.env file containing build arguments
+
 ## 2.0.4
 
 * Fixed defunct process on GlusterFS plugin.

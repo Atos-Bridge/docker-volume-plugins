@@ -14,7 +14,7 @@ RUN apt update && \
 COPY s3fs-volume-plugin/rsyslog.conf /etc/rsyslog.conf
 COPY s3fs-volume-plugin/fuse.conf /etc/fuse.conf
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} golang:${GO_VERSION:-1.23.10}-alpine AS dev
+FROM --platform=${TARGETPLATFORM:-linux/amd64} golang:${GO_VERSION:-1.23}-alpine AS dev
 
 RUN apk update && apk add git
 
@@ -32,4 +32,4 @@ LABEL   \
         org.opencontainers.image.created=${BUILD_DATE} \
         org.opencontainers.image.version=${PLUGIN_VERSION} \
         org.opencontainers.image.source=https://github.com/marcelo-ochoa/docker-volume-plugins \
-        org.opencontainers.image.description="S3FS Volume Plugin v${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION} and Golang v${GO_VERSION}."
+        org.opencontainers.image.description="S3FS Volume Plugin v${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION:-24.04} and Golang v${GO_VERSION:-1.23}."

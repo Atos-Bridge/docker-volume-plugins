@@ -35,6 +35,4 @@ LABEL   \
         org.opencontainers.image.created=${BUILD_DATE} \
         org.opencontainers.image.version=${PLUGIN_VERSION} \
         org.opencontainers.image.source=https://github.com/marcelo-ochoa/docker-volume-plugins \
-        org.opencontainers.image.description="GlusterFS Volume Plugin v${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION} and Golang v${GO_VERSION}." \
-        org.opencontainers.image.base.name=ubuntu:${UBUNTU_VERSION:-24.04} \
-        org.opencontainers.image.ref.name="golang:${GO_VERSION:-1.23} / glusterfs:11"
+        org.opencontainers.image.description="GlusterFS Volume Plugin v${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION}, Golang v${GO_VERSION} and GlusterFS 11."
