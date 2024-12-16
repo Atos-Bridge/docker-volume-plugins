@@ -11,6 +11,15 @@ fi
 export TAG=${1:-latest}
 export ARCH=${2:-"$(uname -m)"}
 
+if [ -f ./build.env ]; then
+	set -a
+	source ./build.env
+	set +a
+fi
+REGISTRY=${REGISTRY:-mochoa}/
+PUSH=${PUSH:-true}
+env
+
 build() {
     if [ $ARCH == "armv7l" ]
     then
@@ -24,14 +33,16 @@ build() {
     fi
     if [ $ARCH == "x86_64" ]
     then
-        docker plugin rm -f mochoa/$1:$TAG || true
+        docker plugin rm -f ${REGISTRY}$1:$TAG || true
     else
-        docker plugin rm -f mochoa/$1-$ARCH:$TAG || true
+        docker plugin rm -f ${REGISTRY}$1-$ARCH:$TAG || true
     fi
     docker rmi -f rootfsimage || true
     docker buildx build --load --platform ${BPLATFORM} \
-        --build-arg GO_VERSION=1.15.10 \
-        --build-arg UBUNTU_VERSION=22.04 \
+        --build-arg GO_VERSION=${GO_VERSION:-1.23} \
+        --build-arg UBUNTU_VERSION=${UBUNTU_VERSION:-24.04} \
+        --build-arg PLUGIN_VERSION="${PLUGIN_VERSION}" \
+        --build-arg BUILD_DATE="$(date +"%Y-%m-%dT%H:%M:%SZ")" \
         -t rootfsimage -f $1/Dockerfile .
     id=$(docker create rootfsimage true) # id was cd851ce43a403 when the image was created
     rm -rf build/rootfs
@@ -41,11 +52,11 @@ build() {
     cp $1/config.json build
     if [ $ARCH == "x86_64" ]
     then
-        docker plugin create mochoa/$1:$TAG build
-        docker plugin push mochoa/$1:$TAG
+        docker plugin create ${REGISTRY}$1:$TAG build
+        [ "$PUSH" == "true" ] && docker plugin push ${REGISTRY}$1:$TAG
     else
-        docker plugin create mochoa/$1-$ARCH:$TAG build
-        docker plugin push mochoa/$1-$ARCH:$TAG
+        docker plugin create ${REGISTRY}$1-$ARCH:$TAG build
+        [ "$PUSH" == "true" ] && docker plugin push ${REGISTRY}$1-$ARCH:$TAG
     fi
 }
 build glusterfs-volume-plugin

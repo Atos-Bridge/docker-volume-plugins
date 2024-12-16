@@ -1,5 +1,5 @@
 {
-    "description": "GlusterFS plugin for Docker v2.0.8",
+    "description": "GlusterFS plugin for Docker v2.0.9",
     "documentation": "https://github.com/marcelo-ochoa/docker-volume-plugins/",
     "entrypoint": [
         "/usr/bin/tini",
@@ -49,7 +49,7 @@
             "description": "",
             "destination": "/etc/ssl",
             "type": "bind",
-            "options": ["readonly", "shared", "rbind"]
+            "options": ["ro", "shared", "rbind"]
         }
     ]
 }
