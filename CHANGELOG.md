@@ -5,7 +5,7 @@ Changelog
 * Bump Ubuntu version to 24.04
 * Bump Go version to 1.23
 * glusterfs: Bump GlusterFS client to v11.
-* Add support for buid.env file containing build arguments
+* Add support for build.env file containing build arguments
 
 ## 2.0.4
 
