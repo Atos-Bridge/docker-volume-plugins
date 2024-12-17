@@ -2,9 +2,14 @@ ARG UBUNTU_VERSION
 ARG GO_VERSION
 ARG PLUGIN_VERSION
 ARG BUILD_DATE
+
 FROM --platform=${TARGETPLATFORM:-linux/amd64} ubuntu:${UBUNTU_VERSION:-24.04} AS base
 
 ENV DEBIAN_FRONTEND="noninteractive"
+ENV UBUNTU_VERSION="${UBUNTU_VERSION:-24.04}"
+ENV GO_VERSION="${GO_VERSION:-1.23}"
+ENV PLUGIN_VERSION="${PLUGIN_VERSION}"
+ENV BUILD_DATE="${BUILD_DATE}"
 
 RUN apt update && \
     apt install -y s3fs curl rsyslog tini && \
@@ -13,6 +18,8 @@ RUN apt update && \
 
 COPY s3fs-volume-plugin/rsyslog.conf /etc/rsyslog.conf
 COPY s3fs-volume-plugin/fuse.conf /etc/fuse.conf
+
+ARG GO_VERSION
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} golang:${GO_VERSION:-1.23}-alpine AS dev
 
@@ -28,8 +35,14 @@ FROM base
 
 COPY --from=dev /go/bin/s3fs-volume-plugin /
 
+ARG UBUNTU_VERSION
+ARG GO_VERSION
+ARG PLUGIN_VERSION
+ARG BUILD_DATE
+
 LABEL   \
         org.opencontainers.image.created=${BUILD_DATE} \
         org.opencontainers.image.version=${PLUGIN_VERSION} \
         org.opencontainers.image.source=https://github.com/marcelo-ochoa/docker-volume-plugins \
-        org.opencontainers.image.description="S3FS Volume Plugin v${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION:-24.04} and Golang v${GO_VERSION:-1.23}."
+        org.opencontainers.image.description="S3FS Volume Plugin ${PLUGIN_VERSION} based on Ubuntu ${UBUNTU_VERSION} and Golang v${GO_VERSION}." \
+        org.opencontainers.image.ref.name="ubuntu:${UBUNTU_VERSION}"
